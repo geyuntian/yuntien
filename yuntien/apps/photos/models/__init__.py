@@ -1,0 +1,1 @@
+from yuntien.apps.photos.models.photo import Photo

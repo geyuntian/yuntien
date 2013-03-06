@@ -1,0 +1,106 @@
+[
+    {
+        "model": "app.app",
+        "pk": 1,
+        "fields": {
+            "key_name": "bulletin",
+            "name": "公告",
+            "description": "",
+            "raw_description": "",
+            "count": 0,
+            "sort": 5,
+            "date_time": "2012-01-01 00:00:00",
+            "created_by": 1,
+            "style": 0,
+            "type": 0,
+            "multiple_widgets": 1,
+            "has_app_page": 0,
+            "supports_community": 1,
+            "supports_user": 0
+        }
+    },
+    
+    {
+        "model": "app.app",
+        "pk": 2,
+        "fields": {
+            "key_name": "note",
+            "name": "记录",
+            "description": "",
+            "raw_description": "",
+            "count": 0,
+            "sort": 40,
+            "date_time": "2012-01-01 00:00:00",
+            "created_by": 1,
+            "style": 0,
+            "type": 0,
+            "multiple_widgets": 1,
+            "has_app_page": 1,
+            "supports_community": 1,
+            "supports_user": 1
+        }
+    },  
+    
+    {
+        "model": "app.app",
+        "pk": 3,
+        "fields": {
+            "key_name": "forum",
+            "name": "论坛",
+            "description": "",
+            "raw_description": "",
+            "count": 0,
+            "sort": 15,
+            "date_time": "2012-01-01 00:00:00",
+            "created_by": 1,
+            "style": 0,
+            "type": 0,
+            "multiple_widgets": 1,
+            "has_app_page": 1,
+            "supports_community": 1,
+            "supports_user": 0
+        }
+    },
+    
+    {
+        "model": "app.app",
+        "pk": 4,
+        "fields": {
+            "key_name": "tui",
+            "name": "推荐",
+            "description": "",
+            "raw_description": "",
+            "count": 0,
+            "sort": 10,
+            "date_time": "2012-01-01 00:00:00",
+            "created_by": 1,
+            "style": 0,
+            "type": 0,
+            "multiple_widgets": 1,
+            "has_app_page": 1,
+            "supports_community": 1,
+            "supports_user": 0
+        }
+    },
+    
+    {
+        "model": "app.app",
+        "pk": 5,
+        "fields": {
+            "key_name": "photos",
+            "name": "相册",
+            "description": "",
+            "raw_description": "",
+            "count": 0,
+            "sort": 50,
+            "date_time": "2012-01-01 00:00:00",
+            "created_by": 1,
+            "style": 0,
+            "type": 0,
+            "multiple_widgets": 1,
+            "has_app_page": 0,
+            "supports_community": 1,
+            "supports_user": 0
+        }
+    }           
+]

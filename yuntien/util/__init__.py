@@ -1,0 +1,1 @@
+#utilities which don't depend on Django
