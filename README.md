@@ -3,6 +3,11 @@ Yuntien Community
 
 Yuntien Community is a community framework, previously built on Google App Engine and now as a standard Django app.
 
+History
+-------
+
+The original Google App Engine project hosted on bitbucket: https://bitbucket.org/chris1919/ytcommunity
+
 Design
 ------
 
