@@ -5,7 +5,6 @@ from django.core.urlresolvers import reverse, resolve
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import *
-from django.contrib.auth.models import User
 from yuntien.authext.views.decorators import check_admin, check_authorization
 from yuntien.authext.models.auth import OPERATION_EDIT
 from yuntien.base.views.decorators.db import check_name

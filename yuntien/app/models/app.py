@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from yuntien.base.models.tag import TagBase, TagEntMixin
 from yuntien.app.settings import APPS
 
@@ -24,7 +24,7 @@ class App(TagEntMixin, models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    created_by = models.ForeignKey(User)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     style = models.IntegerField(default=0) #0:wide
     type = models.IntegerField(default=0) #0:internal, 1:external
     

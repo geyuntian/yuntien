@@ -1,43 +1,72 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from yuntien.app.models.app import App
-from yuntien.app.settings import APPS
-from yuntien.user.settings import USER_WIDGETS
+from django.core.files.storage import default_storage
+from django.core.urlresolvers import reverse
+from yuntien.base.models.image import ImageMixin
+from yuntien.user.settings import DEFAULT_USER_PROFILE_IMAGE
+from yuntien.user.models.relation import *
+from yuntien.authext.models.user import get_current_user
 
-class Widget(models.Model):
-    
-    class Meta:
+class User(ImageMixin, AbstractUser):
+    class Meta(AbstractUser.Meta):
         app_label = 'user'
-        ordering = ['-sort']
-        unique_together = (("user", "key_name"),)
-
-    user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_set")
-    key_name = models.CharField(max_length=30)
-#    area = models.ForeignKey(Area)
-    app = models.ForeignKey(App, related_name="%(app_label)s_%(class)s_set")
-    
-    name = models.CharField(max_length=30)
-    sort = models.IntegerField(default=0)
-    date_time = models.DateTimeField(auto_now_add=True)
-    
+        
     description = models.TextField(blank=True)
     raw_description = models.TextField(blank=True)
     
+    temp_email = models.EmailField(blank=True)
+
+    friends_count = models.IntegerField(default=0)
+    followers_count = models.IntegerField(default=0)
+    statuses_count = models.IntegerField(default=0)
+    
+    has_profile_image = models.BooleanField(default=False)
+    
+    def get_absolute_url(self):
+        return reverse('user-display', kwargs={'user':self.username})
+
     @property
-    def app_config(self):
-        return APPS.get(self.app.key_name, None)
+    def name(self):
+        return self.username
 
-    def __unicode__(self):
-        return '%s - %s' %(self.user.username, self.name)
-
-def _post_save_user(sender, **kwargs):
-    if kwargs.get('created', None):
-        user = kwargs.get('instance')
-        for w in USER_WIDGETS:
-            widget = USER_WIDGETS[w]
-            app = App.objects.get(key_name=widget['app_id'])
-            widget_obj = Widget(user=user, key_name=widget['id'], sort=widget['sort'], name=widget['name'], app=app)
-            widget_obj.save()
+    @property
+    def profile_image(self):
+        if self.has_profile_image:
+            return default_storage.url('icon/user/%d.jpg' % self.id)
         
-post_save.connect(_post_save_user, sender=User)
+        return DEFAULT_USER_PROFILE_IMAGE
+    
+    @property
+    def friends(self):
+        return [u.user2 for u in self.friend_set.all()[:12]]
+
+    @property
+    def followers(self):
+        return [u.user1 for u in self.follower_set.all()[:12]]
+    
+    def create_friendship(self, user):
+        if self.id == user.id:
+            return
+        if self.friends_count >= 100:
+            return
+        if Relation.create(self, user):
+            self.friends_count += 1
+            self.save()
+            user.followers_count += 1
+            user.save()
+
+    #Better to patch the user model?
+    def destroy_friendship(self, user):
+        if Relation.destroy(self, user):
+            self.friends_count -= 1
+            self.save()
+            user.followers_count -= 1
+            user.save()
+            
+    def is_friend(self, user=None):
+        if not user:
+            user = get_current_user()        
+        return Relation.exists(user, self)
+    
+    def get_profile(self):
+        return self

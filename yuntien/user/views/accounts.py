@@ -17,13 +17,12 @@ from django.core.urlresolvers import reverse, resolve
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import *
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 # Avoid shadowing the login() and logout() views below.
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
-from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import get_current_site
 
@@ -49,14 +48,14 @@ class UserCreationForm(forms.ModelForm):
     email = forms.EmailField(label=_("Email"))
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ("username",)
 
     def clean_username(self):
         username = self.cleaned_data["username"]
         try:
-            User.objects.get(username=username)
-        except User.DoesNotExist:
+            get_user_model().objects.get(username=username)
+        except get_user_model().DoesNotExist:
             return username
         raise forms.ValidationError(_("A user with that username already exists."))
 
@@ -70,8 +69,8 @@ class UserCreationForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data["email"]
         try:
-            User.objects.get(email=email)
-        except User.DoesNotExist:
+            get_user_model().objects.get(email=email)
+        except get_user_model().DoesNotExist:
             return email
         raise forms.ValidationError(_("A user with that email already exists."))
 
@@ -86,13 +85,12 @@ def register(request, render):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = User.objects.create_user(
+            user = get_user_model().objects.create_user(
                                             form.cleaned_data['username'], 
                                             '', 
                                             form.cleaned_data['password1'])
-            p = user.get_profile()
-            p.email = form.cleaned_data['email']
-            p.save()
+            user.temp_email = form.cleaned_data['email']
+            user.save()
             redirect = reverse('accounts-login')
             redirect = '%s?type=new' % redirect
             return HttpResponseRedirect(redirect)

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from yuntien.apps.note.views.tool import render
 from yuntien.apps.note.views.post import render_feed
 

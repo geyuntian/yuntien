@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse, resolve
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import *
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from yuntien.common.markup import text_markup
 from yuntien.common.exceptions import YTError
 from yuntien.common.http import HttpResponseDirectOutput, HttpResponseRichOutput
@@ -22,27 +22,26 @@ def set_user_info(request, render):
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
-            profile = user_obj.get_profile()
-            profile.description = text_markup.render( form.cleaned_data['description'] )
-            profile.raw_description = form.cleaned_data['description']
-            profile.save()
+            user_obj.description = text_markup.render( form.cleaned_data['description'] )
+            user_obj.raw_description = form.cleaned_data['description']
+            user_obj.save()
             url = reverse('user-display', kwargs={'user':user_obj.username})
             return HttpResponseRedirect(url)
     else:
-        form = UserForm(initial={'description':user_obj.get_profile().raw_description}) # An unbound form
+        form = UserForm(initial={'description':user_obj.raw_description}) # An unbound form
 
     context = {'form': form, 'user_obj':user_obj}
     return render(request, context)    
 
 @check_username()
 def display(request, render, user):
-    user_obj = User.objects.get(username=user)
+    user_obj = get_user_model().objects.get(username=user)
     widget = user_obj.user_widget_set.all()[0].key_name
     return dispatch(request, render, user, widget)
 
 @check_username()
 def dispatch(request, render, user, widget, path=''):
-    user_obj = User.objects.get(username=user)
+    user_obj = get_user_model().objects.get(username=user)
     user_obj.latest_communities = [ra.obj for ra in user_obj.main_ra_set.all()[:12]]
     
     if not widget in USER_WIDGETS:

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from yuntien.community.main.views.tool import render
 from yuntien.community.main.settings import CONFIG
 from yuntien.status.views.statuses import render_atom

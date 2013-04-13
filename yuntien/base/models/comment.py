@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from yuntien.authext.models.auth import AuthEntMixin
 
 REFS_LENGTH = 10
@@ -11,7 +11,7 @@ class CommentBase(AuthEntMixin, models.Model):
     class Meta:
         abstract = True    
     
-    author = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_set")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_set")
     content = models.TextField(blank=True)
     raw_content = models.TextField(blank=True)
     

@@ -4,7 +4,7 @@ from django.utils import feedgenerator
 from django.utils.simplejson import *
 from django import forms
 from django.core.paginator import Paginator
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from yuntien.authext.views.decorators import check_authorization, check_user
 from yuntien.authext.models.user import get_current_user
 from yuntien.authext.models.auth import *
@@ -112,7 +112,7 @@ def get_common_filters(request):
 
 def _list(request, render, num_per_page=10, filters=[], user='', widget='', c={}):
     filters = get_common_filters(request) + filters
-    u = User.objects.get(username=user)
+    u = get_user_model().objects.get(username=user)
 
     w = u.user_widget_set.get(key_name=widget)
     filters.append(lambda q: q.filter(user_widget=w))

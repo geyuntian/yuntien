@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from yuntien.authext.models.user import *
 
 class RecordEntMixin(object):
@@ -18,7 +18,7 @@ class RecordBase(models.Model):
     class Meta:
         abstract = True    
     
-    user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_set")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_set")
     operation = models.IntegerField(default=0)
     date_time = models.DateTimeField(auto_now_add=True)
 

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from yuntien.apps.forum.views.tool import render
 
 def r(template):

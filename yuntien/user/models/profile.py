@@ -1,7 +1,8 @@
 import urllib, hashlib
+from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from yuntien.base.models.image import ImageMixin
 from yuntien.user.settings import DEFAULT_USER_PROFILE_IMAGE
@@ -13,7 +14,7 @@ class UserProfile(ImageMixin, models.Model):
     class Meta:
         app_label = 'user'
 
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     description = models.TextField(blank=True)
     raw_description = models.TextField(blank=True)
     
@@ -72,4 +73,4 @@ def _create_profile(sender, **kwargs):
         u = UserProfile(user=kwargs.get('instance'))
         u.save()
         
-post_save.connect(_create_profile, sender=User)
+#post_save.connect(_create_profile, sender=get_user_model())

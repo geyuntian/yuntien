@@ -1,11 +1,12 @@
 import copy
+from django.conf import settings
 from yuntien.authext.models.auth import AuthCheckParent
 from yuntien.base.models.post import *
 from yuntien.base.models.comment import *
 from yuntien.base.models.category import CategoryBase
 from yuntien.base.models.tag import TagBase
 from yuntien.community.main.models.community import Community, Widget
-from yuntien.user.models.user import Widget as UserWidget
+from yuntien.user.models.widget import Widget as UserWidget
 from yuntien.status.models import Status, SOURCE_TYPE_USER, SOURCE_TYPE_COMMUNITY
 
 class Tag(TagBase):
@@ -20,7 +21,7 @@ class Topic(PostBase):
         
     community = models.ForeignKey(Community, related_name="%(app_label)s_%(class)s_set", blank=True, null=True) 
     community_widget = models.ForeignKey(Widget, related_name="%(app_label)s_%(class)s_set", blank=True, null=True)
-    user = models.ForeignKey(User, related_name="%(app_label)s_user_%(class)s_set", blank=True, null=True) 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_user_%(class)s_set", blank=True, null=True) 
     user_widget = models.ForeignKey(UserWidget, related_name="%(app_label)s_%(class)s_set", blank=True, null=True)
     status = models.ForeignKey(Status, related_name="%(app_label)s_%(class)s_set", blank=True, null=True)
 
@@ -92,7 +93,7 @@ class Comment(CommentBase):
     topic = models.ForeignKey(Topic)
     community = models.ForeignKey(Community, related_name="%(app_label)s_%(class)s_set", blank=True, null=True) 
     community_widget = models.ForeignKey(Widget, related_name="%(app_label)s_%(class)s_set", blank=True, null=True)
-    user = models.ForeignKey(User, related_name="%(app_label)s_user_%(class)s_set", blank=True, null=True) 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_user_%(class)s_set", blank=True, null=True) 
     user_widget = models.ForeignKey(UserWidget, related_name="%(app_label)s_%(class)s_set", blank=True, null=True)
     
     @classmethod

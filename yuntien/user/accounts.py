@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from yuntien.community.main.views.tool import render
 from yuntien.user.settings import USER_ID_REGEX, WIDGET_ID_REGEX
 

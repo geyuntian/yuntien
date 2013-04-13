@@ -6,7 +6,6 @@ from django.core.paginator import Paginator
 from django.utils.translation import ugettext_lazy as _
 from django.utils import feedgenerator
 from django.shortcuts import *
-from django.contrib.auth.models import User
 from django.http import HttpResponseNotFound
 from yuntien.common.markup import text_markup
 from yuntien.base.views.request import check_request_method, get_int_param

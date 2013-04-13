@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
 class Relation(models.Model):
     
@@ -8,8 +8,8 @@ class Relation(models.Model):
         ordering = ['-date_time']
         unique_together = (("user1", "user2"),)
 
-    user1 = models.ForeignKey(User, related_name="friend_set")
-    user2 = models.ForeignKey(User, related_name="follower_set")
+    user1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="friend_set")
+    user2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="follower_set")
     type = models.IntegerField(default=0)
     date_time = models.DateTimeField(auto_now_add=True)
 

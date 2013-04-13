@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import *
 from django.http import HttpResponseNotFound 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from yuntien.common.markup import text_markup
 from yuntien.status.models.status import Status
 from yuntien.base.views.request import check_request_method, get_int_param
@@ -16,7 +16,7 @@ class StatusForm(forms.Form):
     title = forms.CharField(required=True, max_length=140, widget=forms.Textarea)
 
 def user_timeline(request, render, user, num_per_page=50):
-    user_obj = User.objects.get(username=user)
+    user_obj = get_user_model().objects.get(username=user)
     user_obj.latest_communities = [ra.obj for ra in user_obj.main_ra_set.all()[:12]]
     
     p = Paginator(user_obj.status_set.all(), num_per_page)

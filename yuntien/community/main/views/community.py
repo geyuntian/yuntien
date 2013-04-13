@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import *
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import permission_required
 from yuntien.common.markup import text_markup
 from yuntien.common.db import *
@@ -77,7 +77,7 @@ def edit(request, community, render):
         for u in users:
             user = None
             try:
-                user = User.objects.get(username=u)
+                user = get_user_model().objects.get(username=u)
             except:
                 raise ValidationError(_(u'%s is not a valid user.') % u)
             role = c.get_role(user)

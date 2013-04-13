@@ -1,6 +1,6 @@
 import datetime
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from yuntien.base.models.tag import *
 from yuntien.base.settings import *
 from yuntien.util.url import get_domain, transform_video_url
@@ -18,7 +18,7 @@ class PostBase(AuthEntMixin, TagEntMixin, models.Model):
         ordering = ['-date_time']
         get_latest_by = "date_time"
 
-    author = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_set")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_set")
     title = models.CharField(max_length=100)
     content = models.TextField(blank=True)
     raw_content = models.TextField(blank=True)

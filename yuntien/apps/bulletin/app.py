@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.shortcuts import *
 from yuntien.community.main.urls import COMMUNITY
 from yuntien.community.main.settings import COMMUNITY_PREFIX

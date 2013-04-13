@@ -14,14 +14,14 @@ SOURCE = {
 SOURCE_TYPE_DEFAULT : {
 'source': {
 'app_label': 'user',
-'model': 'userprofile'
+'model': 'user'
 },
 },
 
 SOURCE_TYPE_USER : {
 'source': {
 'app_label': 'user',
-'model': 'userprofile'
+'model': 'user'
 },
 'source_widget': {
 'app_label': 'user',

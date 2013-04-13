@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse, NoReverseMatch
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from yuntien.apps.tui.views.tui import render_tui, render_feed
 from yuntien.apps.tui.views.tool import render
 from yuntien.community.main.urls import COMMUNITY, WIDGET

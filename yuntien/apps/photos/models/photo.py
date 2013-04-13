@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from yuntien.authext.models.auth import AuthEntMixin, AuthCheckParent
 from yuntien.user.models import Widget as UserWidget
@@ -18,7 +18,7 @@ class Photo(AuthEntMixin, ImageMixin, SourceMixin, models.Model):
         app_label = 'photos'
         ordering = ['-date_time']
 
-    user = models.ForeignKey(User, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
     
     type = models.IntegerField(default=0)
     

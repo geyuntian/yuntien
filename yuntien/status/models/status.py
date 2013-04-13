@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from yuntien.user.models import Widget as UserWidget
 from yuntien.community.main.models import Community
@@ -25,7 +25,7 @@ class Status(SourceMixin, models.Model):
         app_label = 'status'
         ordering = ['-date_time']
 
-    user = models.ForeignKey(User, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
     privacy_type = models.IntegerField(default=PUBLIC)
     
     app = models.ForeignKey(App, blank=True, null=True)
@@ -87,16 +87,15 @@ class Status(SourceMixin, models.Model):
     
     def delete(self):
         try:
-            p = self.user.get_profile()
-            p.statuses_count -= 1
-            p.save()
+            self.user.statuses_count -= 1
+            self.user.save()
             self.community.statuses_count -= 1
             self.community.save()
         except:
             pass
         super(Status, self).delete()
             
-    def save(self, *args, **kwargs):        
+    def save(self, *args, **kwargs):   
         add_status = not self.id
         
         if self.source_type == SOURCE_TYPE_DEFAULT:
@@ -105,9 +104,8 @@ class Status(SourceMixin, models.Model):
         super(Status, self).save(*args, **kwargs) 
         if add_status: 
             try:
-                p = self.user.get_profile()
-                p.statuses_count += 1
-                p.save()
+                self.user.statuses_count += 1
+                self.user.save()
                 self.community.statuses_count += 1
                 self.community.save()
             except:

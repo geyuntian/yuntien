@@ -8,7 +8,7 @@ from django.template.smartif import IfParser, Literal
 from django.conf import settings
 from django.utils.encoding import smart_str, smart_unicode
 from django.utils.safestring import mark_safe
-from yuntien.user.models import UserProfile
+from yuntien.user.models import User
 
 register = Library()
 
@@ -23,8 +23,8 @@ class HotNode(Node):
         except:
             num = Variable(self.num).resolve(context)
 
-        objects = UserProfile.objects.all().order_by('-statuses_count')[:num]
-        users = [obj.user for obj in objects if obj.statuses_count > 0]
+        objects = User.objects.all().order_by('-statuses_count')[:num]
+        users = [obj for obj in objects if obj.statuses_count > 0]
 
         if self.asvar:
             context[self.asvar] = users

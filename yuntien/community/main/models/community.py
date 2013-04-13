@@ -1,6 +1,7 @@
+from django.conf import settings
 from django.core.files.storage import default_storage
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.contrib.auth.models import User
 from yuntien.authext.models.ra import RABase, RAEntMixin
 from yuntien.authext.models.auth import AuthEntMixin, AuthWithRA, ROLE_USER, ROLE_OWNER
 from yuntien.authext.models import auth
@@ -38,7 +39,7 @@ class Community(AuthEntMixin, RAEntMixin, TagEntMixin, ImageMixin, models.Model)
     date_time = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    created_by = models.ForeignKey(User)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     style = models.IntegerField(default=0)
     area_count = models.IntegerField(default=0)
     widget_count = models.IntegerField(default=0)
@@ -49,6 +50,9 @@ class Community(AuthEntMixin, RAEntMixin, TagEntMixin, ImageMixin, models.Model)
 
     def __unicode__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('community-display', kwargs={'community':self.key_name})
     
     @classmethod
     def get_tag_class(cls):
@@ -88,7 +92,7 @@ class Community(AuthEntMixin, RAEntMixin, TagEntMixin, ImageMixin, models.Model)
         self.save()
 
     def leave(self, user):
-        if not self.has_joined(user):# or YTUser.get_current_user().user_id in self.admins:
+        if not self.has_joined(user):
             return
         
         #creator can't leave

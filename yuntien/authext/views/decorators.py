@@ -1,5 +1,5 @@
 from django.http import *
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from yuntien.authext.models.auth import *
 
 #generic authorization decorator
@@ -65,5 +65,5 @@ def _check_obj(cls, view=_default_view, finder=_find_by_id):
 def check_username(view=_default_view, name='user'):
     def _find(cls, request, *args, **kwds):
         if kwds.has_key(name):
-            return User.objects.get(username=kwds[name])
-    return _check_obj(User, view, finder=_find)
+            return get_user_model().objects.get(username=kwds[name])
+    return _check_obj(get_user_model(), view, finder=_find)

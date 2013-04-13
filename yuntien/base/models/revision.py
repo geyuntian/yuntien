@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from yuntien.authext.models.user import *
 
 TYPE_DEFAULT = 0
@@ -34,7 +34,7 @@ class RevisionBase(RevisionMixin, models.Model):
     
     version = models.IntegerField(default=1)
     type = models.IntegerField(default=0)
-    user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_set")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_set")
     comment = models.TextField(blank=True)
     date_time = models.DateTimeField(auto_now_add=True)
     

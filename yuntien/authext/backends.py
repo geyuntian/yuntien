@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.auth.backends import ModelBackend
 
 class Backend(ModelBackend):
